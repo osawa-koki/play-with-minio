@@ -1,0 +1,8 @@
+{
+  "name": "play-with-minio",
+  "description": "❤️‍🔥❤️‍🔥❤️‍🔥 MinIOを使用してローカル環境でS3オブジェクトストレージを構築する！",
+  "repository": "https://github.com/osawa-koki/play-with-minio.git",
+  "author": "osawa-koki <koki@osawa.dev>",
+  "license": "Apache-2.0",
+  "private": false
+}
