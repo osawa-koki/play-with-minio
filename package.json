@@ -4,5 +4,8 @@
   "repository": "https://github.com/osawa-koki/play-with-minio.git",
   "author": "osawa-koki <koki@osawa.dev>",
   "license": "Apache-2.0",
-  "private": false
+  "private": false,
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
 }
