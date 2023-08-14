@@ -152,4 +152,5 @@ import dayjs from 'dayjs'
   .catch((error: Error) => {
     console.error('Failed.')
     if (error instanceof Error) console.error(`ERROR: ${error.message}`)
+    process.exit(1)
   })
