@@ -15,6 +15,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
+      - name: Create .env file
+        run: echo $'${{ secrets.DOTENV }}' > .env
       - name: Run docker daemon
         run: docker-compose up -d
       - name: Install dependencies
