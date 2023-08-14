@@ -54,14 +54,22 @@ import dayjs from 'dayjs'
 
   dotenv.config()
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  /* eslint-disable @typescript-eslint/no-non-null-assertion */
   const AWS_REGION = process.env.AWS_REGION!
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME!
+  const MINIO_ROOT_USER = process.env.MINIO_ROOT_USER!
+  const MINIO_ROOT_PASSWORD = process.env.MINIO_ROOT_PASSWORD!
+  /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
   // S3 クライアントを作成。
   const client = new S3Client({
-    region: AWS_REGION
+    region: AWS_REGION,
+    endpoint: 'http://localhost:9000',
+    credentials: {
+      accessKeyId: MINIO_ROOT_USER,
+      secretAccessKey: MINIO_ROOT_PASSWORD
+    },
+    forcePathStyle: true // MinIOでは必須。
   })
 
   // ファイル一覧を取得。
@@ -78,7 +86,8 @@ import dayjs from 'dayjs'
       data.Contents?.forEach((content) => {
         console.log(`- ${content.Key as string}`)
       })
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) throw new Error(`Failed to list files: ${error.message}`)
       throw new Error('Failed to list files.')
     }
   }
@@ -101,8 +110,9 @@ import dayjs from 'dayjs'
     try {
       await client.send(new PutObjectCommand(params))
       console.log(`Uploaded: ${key}`)
-    } catch (error) {
-      throw new Error(`Failed to upload file: ${key}`)
+    } catch (error: unknown) {
+      if (error instanceof Error) throw new Error(`Failed to upload file: ${error.message}`)
+      throw new Error('Failed to upload file.')
     }
   }
   await uploadFile()
@@ -129,7 +139,8 @@ import dayjs from 'dayjs'
         if (file == null) throw new Error('Failed to get file.')
         console.log(`- ${content.Key as string}: ${file}`)
       })
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof Error) throw new Error(`Failed to get file: ${error.message}`)
       throw new Error('Failed to get file.')
     }
   }
